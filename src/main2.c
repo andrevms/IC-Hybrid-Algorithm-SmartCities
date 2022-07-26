@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<time.h>
+#include <time.h>
+
+#include <genericMatrizAdjacente.h>
 
 int *matrix_size, *num_passageiros, *num_car_passageiros;
 int n_atributos_pessoas = 2;
@@ -290,15 +292,35 @@ void find_passageiros_path(){
 
 int main ( int argc, char **argv){
   srand(time(0));
+
+  printf("Aqui\n");
+
+
    
   ///TODO Open all files in a given directory -- Abrir todos os arquivos de um diretorio 
-  load_files_memory("instancias/TIC01-10-10-3.in");
+  //load_files_memory("instancias/TIC01-10-10-3.in");
   
-  //find_path_random();
 
-  find_path_gulosa_aleatorizada();
-  calculate_path_peso();
-  find_passageiros_path();
+  //fazer 100 soluções
+
+  //do {
+
+  //find_path_random();
+  //colocar os passageiros
+
+  //find_path_gulosa_aleatorizada();
+  // usar o busca local - 2opt
+  
+  //calculate_path_peso();
+  //find_passageiros_path();
+  
+  // salvar cada resultado 
+//}
+
+// 
+//fazer desvio padrão 
+
+
 
  // free(path);
   //free(v_matrix);

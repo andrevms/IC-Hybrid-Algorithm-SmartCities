@@ -21,13 +21,16 @@ PathTS PathTSinit_int(int* pathCaminho, int* valuePath, int pathTamanho);
 //FUNCTIONS
 //Retorna um caminho randomizado aleatorio
 PathTS PathTSrandom_int(Matriz m);
-int* arrayRandGuloso_int(Matriz m);
 
+//Retorna um caminho aleatorio guloso 
+PathTS PathTSrandGuloso_int(Matriz m);
+
+//retorna um array com o caminho selecionado de forma aleatoria e gulosa utilizando os pesos das entradas para selecionar o caminho 
+int* arrayRandGuloso_int(Matriz m);
 /*Calcula o valor total dos pesos do path recebido*/
 int pathValue(int* path, int size);
 
-//Retorna um caminho aleatorio guloso com
-PathTS PathTSrandGuloso_int(Matriz m);
+
 
 
 //PRINTS's

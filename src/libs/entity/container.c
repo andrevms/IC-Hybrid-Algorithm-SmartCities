@@ -7,3 +7,9 @@ Container containerInit( Matriz matriz, Passageiros pList, Carro carro){
     ct->c = carro;
     return ct;
 }
+
+void containerPrint(Container ct){
+  MATRIZprint_int(ct->m);
+  passageiroPrint(ct->p);
+  carroPrint(ct->c);
+}

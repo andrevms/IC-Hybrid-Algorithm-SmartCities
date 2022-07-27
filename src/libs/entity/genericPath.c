@@ -83,7 +83,6 @@ int pathValue(int* path, int size){
     return value;
 }
 
-//TODO 
 int* arrayRandGuloso_int(Matriz m){
     int mSizePlus1 = m->size_x +1;
     int mSizeMinus1 = m->size_x -1;
@@ -106,7 +105,7 @@ int* arrayRandGuloso_int(Matriz m){
     
     
     //Iniciar criação do path com random
-    srand(time(0));
+    
     for (size_t i = 0; i < mSizeMinus1; i++)
     {
         
@@ -119,7 +118,7 @@ int* arrayRandGuloso_int(Matriz m){
             int breakAtual =  pathValue(pesosEntradas, y+1);
             if (vRand < breakAtual)
             {
-                printf("Entrou aqui y no array %d, valor no array = %d, vRand = %d , breakAtual = %d\n", y, entradasPossiveis[y], vRand, breakAtual);
+                //printf("Entrou aqui y no array %d, valor no array = %d, vRand = %d , breakAtual = %d\n", y, entradasPossiveis[y], vRand, breakAtual);
                 
                 int aux = entradasPossiveis[y];
                 entradasPath[i+1] = aux;
@@ -144,7 +143,6 @@ int* arrayRandGuloso_int(Matriz m){
     return entradasPath;
 }
 
-//TODO
 PathTS PathTSrandGuloso_int(Matriz m){
     int* pathResult = arrayRandGuloso_int(m);
      //Calculando custo do caminho
@@ -154,7 +152,7 @@ PathTS PathTSrandGuloso_int(Matriz m){
     { 
         *valueCaminho += *(((int*)m->nodeVal) + (pathResult[i-1]* m->size_y) + pathResult[i] );
     }
-    printf("Custo do caminho : %d\n", *valueCaminho);
+    //printf("Custo do caminho : %d\n", *valueCaminho);
 
     PathTS p = PathTSinit_int(pathResult, valueCaminho, m->size_x+1); 
     return p;

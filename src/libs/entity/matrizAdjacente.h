@@ -19,6 +19,13 @@ Matriz MATRIZinit_int(int row, int col, int* vetor);
 /* Inicia os tamanhos da matriz de adjacencia e seu vetor com todas as entradas com o valor val */
 Matriz MATRIZinit_intVal(int row, int col, int val);
 
+
+//FUNCTIONS
+/*Retorna os elementos da linha da matriz adjacente como um array*/
+int* MATRIZlinhaPesos_int(Matriz m, int row);
+/*Retorna o peso da posição do elemento da matriz adjacente*/
+int MATRIZelementoPesos_int(Matriz m, int row, int col);
+
 //PRINTS's
 /* Imprime as informações do matriz de inteiros: size_x; size_y; nodeVal -> size = [row * cow] */
 void MATRIZprint_int(Matriz m);

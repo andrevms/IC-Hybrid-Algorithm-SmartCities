@@ -11,10 +11,16 @@ void main(int argc, char const *argv[])
   printf("\nArquivo %s\n", argv[1]);
   Container ct = loadPath(argv[1]);
 
+  
+  //MATRIZprint_int(ct->m);
+  //passageiroPrint(ct->p);
+  //carroPrint(ct->c);
 
-  MATRIZprint_int(ct->m);
-  passageiroPrint(ct->p);
-  carroPrint(ct->c);
+  PathTS path = PathTSrandGuloso_int(ct->m);
+  PathTSprint_int(path);
+  free(path->path);
+  free(path->value);
+  free(path);
 
   free(ct->m->nodeVal);
   free(ct->m);

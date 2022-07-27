@@ -73,9 +73,18 @@ PathTS PathTSrandom_int(Matriz m) {
     return p;
 }
 
+int pathValue(int* path, int size){
+    int value = 0;
+
+    for (int i = 0; i < size; i++)
+    {
+        value += path[i];
+    }
+    return value;
+}
+
 //TODO 
 int* arrayRandGuloso_int(Matriz m){
-
     int mSizePlus1 = m->size_x +1;
     int mSizeMinus1 = m->size_x -1;
     
@@ -85,29 +94,70 @@ int* arrayRandGuloso_int(Matriz m){
 
     //Preparando array PathRandom com tamanho [MatrizTamanho + 1] Pois é uma pathTS
     int* entradasPath = calloc (mSizePlus1, sizeof(int));
-    entradasPath[0] = 0;
+    entradasPath[0] = 0; //Primeira e ultima entrada sempre iguais (pathTS)
+    entradasPath[m->size_x] = 0; 
 
+    //Iniciando array com todas os pesos de zero 
+    int* pesosEntradas = calloc (mSizeMinus1, sizeof(int));
+    for (int i = 0; i < mSizeMinus1; i++)
+    {
+        pesosEntradas[i] = MATRIZelementoPesos_int(m, 0, i+1);
+    }
+    
+    
     //Iniciar criação do path com random
     srand(time(0));
+    for (size_t i = 0; i < mSizeMinus1; i++)
+    {
+        
+        int pVal = pathValue(pesosEntradas, mSizeMinus1-i);
+        int vRand = rand()%pVal; //Valor randomizado dos pesos possiveis
 
-    //for (size_t i = 0; i < mSizeMinus1; i++)
-    //{
-    //    
-    //}
-    
+        int y = 0;
+        do
+        {
+            int breakAtual =  pathValue(pesosEntradas, y+1);
+            if (vRand < breakAtual)
+            {
+                printf("Entrou aqui y no array %d, valor no array = %d, vRand = %d , breakAtual = %d\n", y, entradasPossiveis[y], vRand, breakAtual);
+                
+                int aux = entradasPossiveis[y];
+                entradasPath[i+1] = aux;
+
+                if(y != (mSizeMinus1-i)) {
+                    entradasPossiveis[y] = entradasPossiveis[(mSizeMinus1-i)-1];
+                }
+
+                for (int i = 0; i < mSizeMinus1-i; i++)
+                {
+                    pesosEntradas[i] = MATRIZelementoPesos_int(m, aux, entradasPossiveis[i]);
+                }
+
+                break;
+            }
+            y++;
+        } while (y < mSizeMinus1-i);
+    }
+
+    free(pesosEntradas);
+    free(entradasPossiveis);
+    return entradasPath;
 }
 
 //TODO
 PathTS PathTSrandGuloso_int(Matriz m){
-    //int* pathResult = arrayRandGuloso_int(m);
+    int* pathResult = arrayRandGuloso_int(m);
+     //Calculando custo do caminho
 
-    //Calculando custo do caminho
-    //int valueCaminho = 0;
-   // for (size_t i = 1; i <= m->size_x; i++){ valueCaminho += *(((int*)m->nodeVal) + (pathResult[i-1]* m->size_y) + pathResult[i] );}
-    //printf("Custo do caminho : %d\n", valueCaminho);
+    int* valueCaminho = calloc(1, sizeof(int));
+    for (size_t i = 1; i <= m->size_x; i++)
+    { 
+        *valueCaminho += *(((int*)m->nodeVal) + (pathResult[i-1]* m->size_y) + pathResult[i] );
+    }
+    printf("Custo do caminho : %d\n", *valueCaminho);
 
-    //PathTS p = PathTSinit_int(pathResult, &valueCaminho, m->size_x+1); 
-   // return p;
+    PathTS p = PathTSinit_int(pathResult, valueCaminho, m->size_x+1); 
+    return p;
 }
 
 //PRINT's

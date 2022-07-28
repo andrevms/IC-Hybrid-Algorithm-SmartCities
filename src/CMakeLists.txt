@@ -7,7 +7,7 @@ project(IC-HYBRID-ALGORITHM-SMARTCITIES VERSION 1.0)
 add_executable(
     IC-HYBRID-ALGORITHM-SMARTCITIES
    
-    libs/entity/genericPath.h libs/entity/genericPath.c
+    libs/entity/pathTS.h libs/entity/pathTS.c
     libs/entity/matrizAdjacente.h libs/entity/matrizAdjacente.c
     libs/entity/passageiros.h libs/entity/passageiros.c
     libs/entity/carro.h libs/entity/carro.c

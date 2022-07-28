@@ -9,6 +9,8 @@ Container loadPath(const char fileName[]) {
     int* pOrigem;
     int* pDestino;
     float* maxVal;
+    float* payVal;
+    
 
     // Inicio da leitura do arquivo.
     if ((fp=fopen (fileName, "r")) != NULL) {
@@ -31,7 +33,8 @@ Container loadPath(const char fileName[]) {
         pOrigem = calloc (numPassageiros, sizeof(int));
         pDestino = calloc (numPassageiros, sizeof(int));
         maxVal = calloc (numPassageiros, sizeof(float));
-        
+        payVal = calloc (numPassageiros, sizeof(float));
+
         for (size_t i = 0; i < numPassageiros; i++)
         {
             fscanf(fp, "%f %d %d", &maxVal[i], &pOrigem[i], &pDestino[i]);
@@ -47,7 +50,7 @@ Container loadPath(const char fileName[]) {
 
     //Inicia a matriz adjacente lida
     Matriz matriz = MATRIZinit_int(matrizSize, matrizSize, vetorMatriz);
-    Passageiros listPassageiros = pListInit(pOrigem, pDestino, maxVal, numPassageiros);
+    Passageiros listPassageiros = pListInit(pOrigem, pDestino, maxVal, payVal, numPassageiros);
     Carro carro = carroInit(numCarPassageiros);
 
     Container ct = containerInit(matriz , listPassageiros, carro);

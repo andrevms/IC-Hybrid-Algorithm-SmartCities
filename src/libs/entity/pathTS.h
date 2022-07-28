@@ -1,5 +1,5 @@
-#ifndef __CAMINHO_H_
-#define __CAMINHO_H_
+#ifndef __PATH_TS_H_
+#define __PATH_TS_H_
   
 #include <stdlib.h>
 #include <stdio.h>
@@ -12,6 +12,7 @@ struct travellingSalesmanPath {
     int pathSize;
 };
 
+
 /* Um PathTS é um ponteiro para uma travellingSalesmanPath*/
 typedef struct travellingSalesmanPath *PathTS;
  
@@ -21,6 +22,9 @@ PathTS PathTSinit_int(int* pathCaminho, int* valuePath, int pathTamanho);
 //FUNCTIONS
 //Retorna um caminho randomizado aleatorio
 PathTS PathTSrandom_int(Matriz m);
+
+int pathValue_int(void* pathValues, int size);
+int pathValue(int* path, int size);
 
 //Retorna um caminho aleatorio guloso 
 PathTS PathTSrandGuloso_int(Matriz m);

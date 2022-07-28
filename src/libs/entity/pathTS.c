@@ -1,5 +1,4 @@
-#include <genericPath.h>
-#include <matrizAdjacente.h>
+#include <pathTS.h>
 
 //INIT
 PathTS PathTSinit_int(int* pathCaminho, int* valuePath, int pathTamanho) {
@@ -11,10 +10,7 @@ PathTS PathTSinit_int(int* pathCaminho, int* valuePath, int pathTamanho) {
     return p;
 }
 
-
-
 //FUNCTIONS
-
 PathTS PathTSrandom_int(Matriz m) {
 
    //Preparando array auxiliar com tamanhos de [1, MatrizTamanho-1] (-1 pq inicia com 0)
@@ -83,6 +79,16 @@ int pathValue(int* path, int size){
     return value;
 }
 
+int pathValue_int(void* pathValues, int size) {
+    int value = 0;
+
+    for (int i = 0; i < size-1; i++)
+    {
+        value += *((int*)pathValues + i);
+    }
+    return value;
+}
+
 int* arrayRandGuloso_int(Matriz m){
     int mSizePlus1 = m->size_x +1;
     int mSizeMinus1 = m->size_x -1;
@@ -147,10 +153,10 @@ PathTS PathTSrandGuloso_int(Matriz m){
     int* pathResult = arrayRandGuloso_int(m);
      //Calculando custo do caminho
 
-    int* valueCaminho = calloc(1, sizeof(int));
+    int* valueCaminho = calloc(m->size_x, sizeof(int));
     for (size_t i = 1; i <= m->size_x; i++)
     { 
-        *valueCaminho += *(((int*)m->nodeVal) + (pathResult[i-1]* m->size_y) + pathResult[i] );
+        valueCaminho[i-1] = *(((int*)m->nodeVal) + (pathResult[i-1]* m->size_y) + pathResult[i] );
     }
     //printf("Custo do caminho : %d\n", *valueCaminho);
 
@@ -161,11 +167,14 @@ PathTS PathTSrandGuloso_int(Matriz m){
 //PRINT's
 void PathTSprint_int(PathTS p){
     if(p->path != NULL && p->value != NULL){
-        printf("PathSize = %d\n", p->pathSize);
-        printf("PathValue = %d\n", *(int*)p->value);
         printf("Path = ");
         for (size_t i = 0; i < p->pathSize; i++) {printf("%d ", *(((int*)p->path)+i)); }
         printf("\n");
+        printf("Path Values = ");
+        for (int i = 0; i < p->pathSize-1; i++) { printf("%d ", *((int*)p->value + i)); }
+        printf("\n");
+        printf("PathValue = %d\n", pathValue_int(p->value, p->pathSize));
+        printf("PathSize = %d\n", p->pathSize);
     }else {
         printf("Path mal definido\n");
     }

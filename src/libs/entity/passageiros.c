@@ -44,16 +44,31 @@ Passageiros pListOnPath(Passageiros p, PathTS pTS, Carro c) {
 
         //Testa se tem alguem para entrar no carro
         if(nAtualPassNoCarro < c->numMaxPassageiros) { // tem espaço no carro?
-            for (int j = 0; j < c->numMaxPassageiros; j++)
+
+            int fPosicaoJaPercorrida = 0;
+            for (int i = 1; i < posicaoAtual; i++) //Começa em 1 para que quem entrar depois do zero, possa voltar ao zero
             {
-                if (destinos[j] == -1)
-                {   
-                   destinos[j] = p->destino[*(((int*)pTS->path)+posicaoAtual)];
-                   nAtualPassNoCarro++;
-                   
-                   origemPassAtendidoList[passageirosAtendidos] = p->origem[*(((int*)pTS->path)+posicaoAtual)];
-                   passageirosAtendidos++;
-                   break;
+                //Passageiro que entraria agora
+                int passDestino = p->destino[*(((int*)pTS->path)+posicaoAtual)];
+                //Testa se o destino já foi percorrido
+                if(passDestino == *(((int*)pTS->path)+i)){
+                    fPosicaoJaPercorrida = 1;
+                }
+            }
+
+            if( fPosicaoJaPercorrida == 0)
+            {
+                for (int j = 0; j < c->numMaxPassageiros; j++)
+                {
+                    if (destinos[j] == -1)
+                    {   
+                    destinos[j] = p->destino[*(((int*)pTS->path)+posicaoAtual)];
+                    nAtualPassNoCarro++;
+                    
+                    origemPassAtendidoList[passageirosAtendidos] = p->origem[*(((int*)pTS->path)+posicaoAtual)];
+                    passageirosAtendidos++;
+                    break;
+                    }
                 }
             }
         }

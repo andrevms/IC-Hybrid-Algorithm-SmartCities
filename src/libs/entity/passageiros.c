@@ -16,29 +16,48 @@ Passageiros pListInit(int* entry, int* out, float* value, float* payValue, int s
 /*Retorna um array de passageiros que satisfazem o path*/
 Passageiros pListOnPath(Passageiros p, PathTS pTS, Carro c) {
     
-    //Array com maximo de passageiros possiveis guardando a origem dos passageiros
-    int* origemPassAtendidoList = calloc(p->listSize, sizeof(int));
-    //Tamanho utilizado para saber quantos passageiros foram atendidos
-    int passageirosAtendidos = 0;
+    int* passNoCarro = calloc(c->numMaxPassageiros, sizeof(int)); //Array com tamanho maximo de passageiros no carro que guarda a posicao no array de passageiros daquele passageiro que acabou de entrar
+    for (int i = 0; i < c->numMaxPassageiros; i++){ passNoCarro[i] = -1;}//Inicializa com valor impossivel
+    
+    int* passAtendidosList = calloc(p->listSize, sizeof(int)); //Array com tamanho maximo de passageiros guarda a posicao no array de passageiros já entraram no carro
+    for (int i = 0; i < c->numMaxPassageiros; i++){ passAtendidosList[i] = -1;}//Inicializa com valor impossivel
 
-    //Array com o destinos dos passageiros dentro do carro (Maximo de Passageiros = numMaxPassageiros)
-    int* destinos = calloc(c->numMaxPassageiros, sizeof(int));
-    for (size_t i = 0; i < c->numMaxPassageiros; i++){ destinos[i] = -1;}
+    float* passValApagarList = calloc(p->listSize, sizeof(float)); //Array com tamanho maximo de passageiros guarda o valor que o passageiros irá pagar ao sair do carro
+
+    int numPassAtendidos = 0; //Tamanho utilizado para saber quantos passageiros foram atendidos
+    int nAtualPassNoCarro = 0; //Cont o valor dos passageiros atualmente no carro
     
-    //Cont o valor dos passageiros atualmente no carro
-    int nAtualPassNoCarro = 0;
     
+    //Inicio do algoritmo
     for (int posicaoAtual = 0; posicaoAtual < pTS->pathSize; posicaoAtual++)
     {
+        //Atualizando valores pagos
+        if (posicaoAtual > 0)
+        {
+            for (int i = 0; i < c->numMaxPassageiros; i++)
+            {
+                //Verifica se existe alguem no carro
+                if (passNoCarro[i] != -1)//Evitar acesso de memoria incorreto
+                {
+                    float valorCaminho = *(((int*)pTS->value)+posicaoAtual-1);//-1 pq o primeiro valor do pTS->value é a aresta [0->1] 
+                    passValApagarList[passNoCarro[i]] += valorCaminho/(nAtualPassNoCarro+1);//+1 por causa do motorista
+                }
+            }
+        }
+        
         //Testa se tem alguem para sair do carro
         if(nAtualPassNoCarro > 0) { // tem alguem no carro?
             for (int j = 0; j < c->numMaxPassageiros; j++)
             {   
                 //Verifica se existe algum destino igual a posição atual do carro
-                if (destinos[j] == *(((int*)pTS->path)+posicaoAtual)) { 
-                    destinos[j] = -1; 
-                    nAtualPassNoCarro--;
-                } 
+                if (passNoCarro[j] != -1)//Evitar acesso de memoria incorreto
+                {
+                    if (p->destino[passNoCarro[j]] == *(((int*)pTS->path)+posicaoAtual)) { 
+                        //Finaliza corrida do Passageiro
+                        passNoCarro[j] = -1; 
+                        nAtualPassNoCarro--;
+                    } 
+                }
             }
         }
 
@@ -48,52 +67,58 @@ Passageiros pListOnPath(Passageiros p, PathTS pTS, Carro c) {
             int fPosicaoJaPercorrida = 0;
             for (int i = 1; i < posicaoAtual; i++) //Começa em 1 para que quem entrar depois do zero, possa voltar ao zero
             {
-                //Passageiro que entraria agora
+                //Testa se o destino já foi percorrido do passageiro que entraria agora 
                 int passDestino = p->destino[*(((int*)pTS->path)+posicaoAtual)];
-                //Testa se o destino já foi percorrido
                 if(passDestino == *(((int*)pTS->path)+i)){
                     fPosicaoJaPercorrida = 1;
                 }
             }
 
+            //Se não foi percorrido
             if( fPosicaoJaPercorrida == 0)
             {
-                for (int j = 0; j < c->numMaxPassageiros; j++)
-                {
-                    if (destinos[j] == -1)
-                    {   
-                    destinos[j] = p->destino[*(((int*)pTS->path)+posicaoAtual)];
-                    nAtualPassNoCarro++;
-                    
-                    origemPassAtendidoList[passageirosAtendidos] = p->origem[*(((int*)pTS->path)+posicaoAtual)];
-                    passageirosAtendidos++;
-                    break;
+                int saida = positionValue_int( pTS->path, pTS->pathSize,  p->destino[*(((int*)pTS->path)+posicaoAtual)]);
+                
+                //Só rodar ele e o motorista 
+                if( (pTSValue_int(pTS->value, posicaoAtual, saida)/2) < p->valorMaximo[posicaoAtual] ){
+                    for (int j = 0; j < c->numMaxPassageiros; j++)
+                    {
+                        if (passNoCarro[j] == -1)
+                        {   
+
+                        passNoCarro[j] = *(((int*)pTS->path)+posicaoAtual);
+                        nAtualPassNoCarro++;
+                        
+                        passAtendidosList[numPassAtendidos] = *(((int*)pTS->path)+posicaoAtual);
+                        numPassAtendidos++;
+                        break;
+                        }
                     }
                 }
+               
             }
         }
     }
 
+    int* pAtendidosListOrigem = calloc(numPassAtendidos, sizeof(int));
+    int* pAtendidosListDestino = calloc(numPassAtendidos, sizeof(int));
+    float* pAtendidosListValorMaximo = calloc(numPassAtendidos, sizeof(float));
+    float* pAtendidosListValorPago = calloc(numPassAtendidos, sizeof(float));
 
-
-    int* pAtendidosListOrigem = calloc(passageirosAtendidos, sizeof(int));
-    int* pAtendidosListDestino = calloc(passageirosAtendidos, sizeof(int));
-    float* pAtendidosListValorMaximo = calloc(passageirosAtendidos, sizeof(float));
-    float* pAtendidosListValorPago = calloc(passageirosAtendidos, sizeof(float));
-
-    for (size_t i = 0; i < passageirosAtendidos; i++)
+    for (size_t i = 0; i < numPassAtendidos; i++) { pAtendidosListValorPago[i] = passValApagarList[passAtendidosList[i]]; }
+    
+    for (size_t i = 0; i < numPassAtendidos; i++)
     {
-        pAtendidosListOrigem[i] = p->origem[origemPassAtendidoList[i]];
-        pAtendidosListDestino[i] = p->destino[origemPassAtendidoList[i]];
-        pAtendidosListValorMaximo[i] = p->valorMaximo[origemPassAtendidoList[i]];
-        pAtendidosListValorPago[i] = p->valorPago[origemPassAtendidoList[i]];
+        pAtendidosListOrigem[i] = p->origem[passAtendidosList[i]];
+        pAtendidosListDestino[i] = p->destino[passAtendidosList[i]];
+        pAtendidosListValorMaximo[i] = p->valorMaximo[passAtendidosList[i]];
     }
     
-    free(origemPassAtendidoList);
-    free(destinos);
+    free(passAtendidosList);
+    free(passNoCarro);
+    free(passValApagarList);
 
-    return pListInit(pAtendidosListOrigem, pAtendidosListDestino,pAtendidosListValorMaximo, pAtendidosListValorPago, passageirosAtendidos);
-
+    return pListInit(pAtendidosListOrigem, pAtendidosListDestino,pAtendidosListValorMaximo, pAtendidosListValorPago, numPassAtendidos);
 }
 
 //PRINTS's

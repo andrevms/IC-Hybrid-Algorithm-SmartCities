@@ -16,11 +16,12 @@ Passageiros pListInit(int* entry, int* out, float* value, float* payValue, int s
 /*Retorna um array de passageiros que satisfazem o path*/
 Passageiros pListOnPath(Passageiros p, PathTS pTS, Carro c) {
     
-    //Array com maximo de passageiros possiveis
-    int* origemPassAtendidoList = calloc(p->listSize, sizeof(int)); //Guarda apenas a origem dos passageiros
+    //Array com maximo de passageiros possiveis guardando a origem dos passageiros
+    int* origemPassAtendidoList = calloc(p->listSize, sizeof(int));
+    //Tamanho utilizado para saber quantos passageiros foram atendidos
     int passageirosAtendidos = 0;
 
-    //Destinos dos passageiros dentro do carro (Maximo de Passageiros = numMaxPassageiros)
+    //Array com o destinos dos passageiros dentro do carro (Maximo de Passageiros = numMaxPassageiros)
     int* destinos = calloc(c->numMaxPassageiros, sizeof(int));
     for (size_t i = 0; i < c->numMaxPassageiros; i++){ destinos[i] = -1;}
     
@@ -31,23 +32,25 @@ Passageiros pListOnPath(Passageiros p, PathTS pTS, Carro c) {
     {
         //Testa se tem alguem para sair do carro
         if(nAtualPassNoCarro > 0) { // tem alguem no carro?
-            for (size_t j = 0; j < c->numMaxPassageiros; j++)
-            {
-                if (destinos[j] == posicaoAtual) { 
+            for (int j = 0; j < c->numMaxPassageiros; j++)
+            {   
+                //Verifica se existe algum destino igual a posição atual do carro
+                if (destinos[j] == *(((int*)pTS->path)+posicaoAtual)) { 
                     destinos[j] = -1; 
                     nAtualPassNoCarro--;
                 } 
             }
         }
-        
+
         //Testa se tem alguem para entrar no carro
         if(nAtualPassNoCarro < c->numMaxPassageiros) { // tem espaço no carro?
-            for (size_t j = 0; j < 3; j++)
+            for (int j = 0; j < c->numMaxPassageiros; j++)
             {
                 if (destinos[j] == -1)
-                {
+                {   
                    destinos[j] = p->destino[*(((int*)pTS->path)+posicaoAtual)];
                    nAtualPassNoCarro++;
+                   
                    origemPassAtendidoList[passageirosAtendidos] = p->origem[*(((int*)pTS->path)+posicaoAtual)];
                    passageirosAtendidos++;
                    break;

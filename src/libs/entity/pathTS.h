@@ -23,7 +23,13 @@ PathTS PathTSinit_int(int* pathCaminho, int* valuePath, int pathTamanho);
 //Retorna um caminho randomizado aleatorio
 PathTS PathTSrandom_int(Matriz m);
 
+PathTS optimize2opt(PathTS path, Matriz m);
+
+int* swap2opt(PathTS pTS, int swapBegin, int swapEnd);
+
+int positionValue_int(void* path, int size, int number);
 int pathValue_int(void* pathValues, int size);
+int pTSValue_int(void* pathValues, int init, int end);
 int pathValue(int* path, int size);
 
 //Retorna um caminho aleatorio guloso 

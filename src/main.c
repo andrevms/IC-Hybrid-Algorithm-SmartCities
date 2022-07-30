@@ -2,7 +2,7 @@
 #include <container.h>
 #include <loadFilesCT.h>
 
-#define INTERACTIONS 2
+#define INTERACTIONS 5
 
 void main(int argc, char const *argv[])
 {
@@ -11,25 +11,31 @@ void main(int argc, char const *argv[])
   printf("\nArquivo %s\n", argv[1]);
   Container ct = loadPath(argv[1]);
 
-  containerPrint(ct);
-
+  //containerPrint(ct);
 
 
   printf("\n\nIniciando resultados\n\n");
   PathTS* pathList = calloc( INTERACTIONS, sizeof(*pathList));
+  PathTS* path2optList = calloc( INTERACTIONS, sizeof(*pathList));
   Passageiros* passList = calloc ( INTERACTIONS, sizeof(*passList));
 
   for (int i = 0; i <  INTERACTIONS; i++)
   {
     pathList[i] = PathTSrandGuloso_int(ct->m);
-    passList[i] = pListOnPath(ct->p, pathList[i], ct->c); 
-
-
-
+    
     printf("\nInteraction %d\n", i);
+    printf("\nRealizando PathTSrandGuloso %d\n", i);
     PathTSprint_int(pathList[i]);
-    printf("\n");
+
+    printf("Realizando o 2opt\nResultados\n");
+
+    path2optList[i] = optimize2opt(pathList[i], ct->m);
+    PathTSprint_int(path2optList[i]);
+
+    printf("\nInserindo Passageiros 2opt\n");
+    passList[i] = pListOnPath(ct->p, pathList[i], ct->c);
     passageiroPrint(passList[i]);
+
   }
 
   for (int i = 0; i < INTERACTIONS; i++)

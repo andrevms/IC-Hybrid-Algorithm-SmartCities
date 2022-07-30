@@ -127,8 +127,17 @@ void passageiroPrint(Passageiros p) {
   
     if(p != NULL){
         printf("Imprimindo passageiros\n");
-        for (int i = 0; i < p->listSize; i++){ printf("Passageiro[%d] O->%d D->%d MaxVal->%f payVal = %f\n",i, p->origem[i], p->destino[i], p->valorMaximo[i], p->valorPago[i]);}
-        printf("\n");
+        if (p->listSize == 0 )
+        {
+            printf("Nao foi encontrado nenhum passageiro\n");
+        }else 
+        {
+            for (int i = 0; i < p->listSize; i++){ printf("Passageiro[%d] O->%d D->%d MaxVal->%f payVal = %f\n",i, p->origem[i], p->destino[i], p->valorMaximo[i], p->valorPago[i]);}
+            printf("\n");
+        }
+        
+        
+        
     }else {
         printf("Passageiro mal definido\n");
     }

@@ -11,6 +11,85 @@ PathTS PathTSinit_int(int* pathCaminho, int* valuePath, int pathTamanho) {
 }
 
 //FUNCTIONS
+
+int* swap2opt(PathTS pTS, int swapBegin, int swapEnd) {
+   int* newRoute = calloc(pTS->pathSize, sizeof(int));
+    
+    //printf("Imprimindo newRoute %d %d: ", swapBegin, swapEnd);
+    for (size_t i = 0; i < swapBegin; i++)
+    {
+        newRoute[i] = *((int*)pTS->path + i);
+        //printf("%d ", newRoute[i]);
+    }
+    for (size_t i = swapBegin, y = 0; i <= swapEnd; i++, y++)
+    {
+        newRoute[i] = *((int*)pTS->path + swapEnd - y);
+        //printf("s%d ", newRoute[i]);
+    }
+
+    for (size_t i = swapEnd+1; i < pTS->pathSize; i++)
+    {
+        newRoute[i] = *((int*)pTS->path + i);
+        //printf("%d ", newRoute[i]);
+    }
+
+    //printf("\n");
+    return newRoute;
+}
+
+PathTS optimize2opt(PathTS pTS, Matriz m) {
+    PathTS oldPath = calloc (1,sizeof(*oldPath));
+    oldPath->path = pTS->path;
+    oldPath->pathSize = pTS->pathSize;
+    oldPath->value = pTS->value;
+
+    int newRouteValue = 0;
+    int oldRouteValue = 0;
+    int oldPathSize = pTS->pathSize;
+
+   int improvement = 0;
+   do {
+        improvement = 0;
+        oldRouteValue =  pathValue_int(oldPath->value, oldPath->pathSize);
+
+        for (int i = 1; i <= pTS->pathSize-1; i++) {
+            for (int j = i + 1; j < pTS->pathSize-1; j++) {
+
+                //Nova rota
+                int* newRoute = swap2opt(oldPath, i, j);
+                //Peso dos Path
+                int* newPesosRoute = calloc(m->size_x, sizeof(int));
+                for (size_t i = 1; i <= m->size_x; i++) { 
+                    newPesosRoute[i-1] = *(((int*)m->nodeVal) + (newRoute[i-1]* m->size_y) + newRoute[i] );
+                }
+                //Valor do novo Path
+                newRouteValue = pathValue_int(newPesosRoute, oldPath->pathSize);
+
+                if(newRouteValue < oldRouteValue){
+                    //printf("\nEntrou aqui %d , old %d  ", newRouteValue , oldRouteValue);printf("\nnewRoute : ");for (size_t i = 0; i < 11; i++){printf("%d ", newRoute[i]);}printf("\nnewPesos : ");for (size_t i = 0; i < 10; i++){printf("%d ", newPesosRoute[i]);}printf("\n\n");
+                
+                    free(oldPath->path);
+                    free(oldPath->value);
+                    free(oldPath);
+                    oldPath = PathTSinit_int(newRoute, newPesosRoute, oldPathSize);
+                    improvement = 1;
+                    break;
+                }
+
+                free(newPesosRoute);
+                free(newRoute);
+            }
+            if(improvement == 1){
+                break;
+            }
+        }
+    } while(improvement == 1);
+
+   return oldPath;
+}
+
+
+/**/
 PathTS PathTSrandom_int(Matriz m) {
 
    //Preparando array auxiliar com tamanhos de [1, MatrizTamanho-1] (-1 pq inicia com 0)
@@ -69,6 +148,19 @@ PathTS PathTSrandom_int(Matriz m) {
     return p;
 }
 
+/**/
+int positionValue_int(void* path, int size, int number){
+    
+    for (int i = 0; i < size+1; i++)
+    {
+        if( number == *((int*)path + i)){
+            return i;
+        }
+    }
+    return 0;
+}
+
+/**/
 int pathValue(int* path, int size){
     int value = 0;
 
@@ -79,10 +171,21 @@ int pathValue(int* path, int size){
     return value;
 }
 
+/**/
 int pathValue_int(void* pathValues, int size) {
     int value = 0;
 
     for (int i = 0; i < size-1; i++)
+    {
+        value += *((int*)pathValues + i);
+    }
+    return value;
+}
+
+int pTSValue_int(void* pathValues, int init, int end) {
+    int value = 0;
+
+    for (int i = init; i < end; i++)
     {
         value += *((int*)pathValues + i);
     }

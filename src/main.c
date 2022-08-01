@@ -16,8 +16,10 @@ void main(int argc, char const *argv[])
 
   printf("\n\nIniciando resultados\n\n");
   PathTS* pathList = calloc( INTERACTIONS, sizeof(*pathList));
-  PathTS* path2optList = calloc( INTERACTIONS, sizeof(*pathList));
   Passageiros* passList = calloc ( INTERACTIONS, sizeof(*passList));
+
+  PathTS* path2optList = calloc( INTERACTIONS, sizeof(*pathList));
+  Passageiros* passList2opt = calloc ( INTERACTIONS, sizeof(*passList2opt));
 
   for (int i = 0; i <  INTERACTIONS; i++)
   {
@@ -26,24 +28,35 @@ void main(int argc, char const *argv[])
     printf("\nInteraction %d\n", i);
     printf("\nRealizando PathTSrandGuloso %d\n", i);
     PathTSprint_int(pathList[i]);
+    printf("\nInserindo Passageiros\n");
+    passList[i] = pListOnPath(ct->p, pathList[i], ct->c);
+    passageiroPrint(passList[i]);
 
-    printf("Realizando o 2opt\nResultados\n");
+    printf("\nRealizando o 2opt\nResultados\n");
 
     path2optList[i] = optimize2opt(pathList[i], ct->m);
     PathTSprint_int(path2optList[i]);
 
     printf("\nInserindo Passageiros 2opt\n");
-    passList[i] = pListOnPath(ct->p, pathList[i], ct->c);
-    passageiroPrint(passList[i]);
+    passList2opt[i] = pListOnPath(ct->p, path2optList[i], ct->c);
+    passageiroPrint(passList2opt[i]);
 
   }
 
   for (int i = 0; i < INTERACTIONS; i++)
   {
-    free(pathList[i]->path);
-    free(pathList[i]->value);
     free(pathList[i]);
+
+    free(path2optList[i]->path);
+    free(path2optList[i]->value);
+    free(path2optList[i]);
     
+    free(passList2opt[i]->destino);
+    free(passList2opt[i]->origem);
+    free(passList2opt[i]->valorMaximo);
+    free(passList2opt[i]->valorPago);
+    free(passList2opt[i]);
+
     free(passList[i]->destino);
     free(passList[i]->origem);
     free(passList[i]->valorMaximo);
@@ -52,7 +65,9 @@ void main(int argc, char const *argv[])
   }
   
   free(pathList);
-  free(passList);  
+  free(passList);
+  free(passList2opt);
+  free(path2optList);
   
   free(ct->m->nodeVal);
   free(ct->m);

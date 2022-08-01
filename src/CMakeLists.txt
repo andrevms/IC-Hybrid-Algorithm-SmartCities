@@ -13,12 +13,10 @@ add_executable(
     libs/entity/carro.h libs/entity/carro.c
     libs/entity/container.h libs/entity/container.c
     
-    libs/load/loadFilesCT.h libs/load/loadFilesCT.c
-    
     main.c
 )
 
 target_include_directories(
     IC-HYBRID-ALGORITHM-SMARTCITIES
-    PRIVATE libs/load libs/entity
+    PRIVATE libs/entity
     )

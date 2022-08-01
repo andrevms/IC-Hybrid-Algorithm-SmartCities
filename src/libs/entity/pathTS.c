@@ -39,14 +39,31 @@ int* swap2opt(PathTS pTS, int swapBegin, int swapEnd) {
 
 PathTS optimize2opt(PathTS pTS, Matriz m) {
     PathTS oldPath = calloc (1,sizeof(*oldPath));
-    oldPath->path = pTS->path;
-    oldPath->pathSize = pTS->pathSize;
-    oldPath->value = pTS->value;
+    
+    //Evitar que o pTS que seja desalocado criando uma copia 
+    int* firstPath = calloc (pTS->pathSize, sizeof(int));
+    int* firstValues = calloc (pTS->pathSize, sizeof(int));
+    int firstSize = pTS->pathSize;
+    
+    for (size_t i = 0; i < pTS->pathSize; i++)
+    {
+        firstPath[i] = *(((int*)pTS->path)+i);
+    }
+
+     for (size_t i = 0; i < pTS->pathSize-1; i++)
+    {
+        firstValues[i] = *(((int*)pTS->value)+i);
+    }
+       
+    oldPath->path = firstPath;
+    oldPath->pathSize = firstSize;
+    oldPath->value = firstValues;
 
     int newRouteValue = 0;
     int oldRouteValue = 0;
     int oldPathSize = pTS->pathSize;
 
+   
    int improvement = 0;
    do {
         improvement = 0;

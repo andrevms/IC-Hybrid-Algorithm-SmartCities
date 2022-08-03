@@ -20,6 +20,12 @@ Passageiros pListInit(int* entry, int* out, float* value, float* payValue, int s
 
 /*Retorna um array de passageiros que satisfazem o path*/
 Passageiros pListOnPath(Passageiros passengerList, PathTS pathTS, Carro car) {
+
+    if (passengerList == NULL || pathTS == NULL || car == NULL)
+    {
+        return NULL;
+    }
+    
     
     int* passNoCarro = calloc(car->numMaxPassageiros, sizeof(int)); //Array com tamanho maximo de passageiros no carro que guarda a posicao no array de passageiros daquele passageiro que acabou de entrar
     for (int i = 0; i < car->numMaxPassageiros; i++){ passNoCarro[i] = -1;}//Inicializa com valor impossivel

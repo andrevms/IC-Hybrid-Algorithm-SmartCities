@@ -18,7 +18,7 @@ typedef struct carro *Carro;
  * \param numCarPassageiros Integer Number of passengers that the car can take.
  * \return A Pointer for an object Carro with numMaxPassageiros with the number received.
  *         NULL if parameters less then 0.
- * \info Object should be desaloc by user
+ * \info Object should be dealloc by user
  */
 Carro carroInit(int numCarPassageiros);
 

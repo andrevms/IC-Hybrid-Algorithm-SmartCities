@@ -36,7 +36,7 @@ Passageiros pListInit(int* entry, int* out, float* value, float* payValue, int s
 //FUNCTION's
 
 /*
- * \brief Try to board passengers on a given path
+ * \brief Try to board given passengersList on a given pathTS
  * \param passengersList Passageiros --> Pointer to struct passageiros [NOT NULL]
  * \param pathTS PathTS --> Pointer to a Travelling Salesman Path [NOT NULL]
  * \param car --> Pointer to a Carro [NOT NULL]

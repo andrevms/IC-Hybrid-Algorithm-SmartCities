@@ -4,12 +4,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
 struct carro {
     int numMaxPassageiros;
 };
-
-
 
 /* Um Carro é um ponteiro para uma struct carro */
 typedef struct carro *Carro;
@@ -24,7 +21,6 @@ typedef struct carro *Carro;
  * \info Object should be desaloc by user
  */
 Carro carroInit(int numCarPassageiros);
-
 
 //PRINTS's
 /*

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <container.h>
 
-#define INTERACTIONS 1
+#define INTERACTIONS 50
 
 void main(int argc, char const *argv[])
 {
@@ -17,7 +17,6 @@ void main(int argc, char const *argv[])
     containerPrint(ct);
     printf("Desalocando memoria\n");
     freeCTattributes(ct);
-    free(ct);
     printf("Finalizado\n");
   }
 }

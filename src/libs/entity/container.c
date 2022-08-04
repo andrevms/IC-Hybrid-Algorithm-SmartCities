@@ -1,6 +1,6 @@
 #include <container.h>
 
-Container containerInit( Matriz matriz, Passageiros pList, Carro carro, int interactions){
+Container containerInit( Matriz matriz, ListPassageiros pList, Car carro, int interactions){
     Container ct = calloc ( 1, sizeof(*ct));
     ct->m = matriz;
     ct->p = pList;
@@ -14,9 +14,9 @@ Container containerInit( Matriz matriz, Passageiros pList, Carro carro, int inte
 }
 
 void containerPrint(Container ct){
-  MATRIZprint_int(ct->m);
-  passageiroPrint(ct->p);
-  carroPrint(ct->c);
+  printMatriz_int(ct->m);
+  printListPassengers(ct->p);
+  printCar(ct->c);
 
   for (int i = 0; i <  ct->interactions; i++)
   {
@@ -25,22 +25,22 @@ void containerPrint(Container ct){
     printf("\nPathTSrandGuloso %d\n", i);
     PathTSprint_int(ct->pathList[i]);
     printf("\nPassageiros\n");
-    passageiroPrint(ct->passList[i]);
+    printListPassengers(ct->passList[i]);
 
     printf("\nResultados 2opt\n");
     PathTSprint_int(ct->path2optList[i]);
     printf("\nPassageiros 2opt\n");
-    passageiroPrint(ct->pass2optList[i]);
+    printListPassengers(ct->pass2optList[i]);
   }
 }
 
 void run(Container ct){
   for (int i = 0; i <  ct->interactions; i++)
   {
-    ct->pathList[i] = PathTSrandGuloso_int(ct->m);
-    ct->passList[i] = pListOnPath(ct->p, ct->pathList[i], ct->c);
+    ct->pathList[i] = generateRandGulosoPathTS_int(ct->m);
+    ct->passList[i] = boardPassengersOnPath(ct->p, ct->pathList[i], ct->c);
     ct->path2optList[i] = optimize2opt(ct->pathList[i], ct->m);
-    ct->pass2optList[i] = pListOnPath(ct->p, ct->path2optList[i], ct->c);
+    ct->pass2optList[i] = boardPassengersOnPath(ct->p, ct->path2optList[i], ct->c);
   }
 }
 
@@ -48,12 +48,15 @@ void run(Container ct){
 void freeCTattributes(Container ct) {
   for (int i = 0; i < ct->interactions; i++)
   {
-    free(ct->pathList[i]->value);
+    
     free(ct->pathList[i]->path);
+    free(ct->pathList[i]->value);
+    free(ct->pathList[i]->totalValue);
     free(ct->pathList[i]);
 
     free(ct->path2optList[i]->path);
     free(ct->path2optList[i]->value);
+    free(ct->path2optList[i]->totalValue);
     free(ct->path2optList[i]);
     
     free(ct->pass2optList[i]->destino);
@@ -82,7 +85,7 @@ void freeCTattributes(Container ct) {
   free(ct->p->valorPago);
   free(ct->p);
   free(ct->c);
-
+  free(ct);
 }
 
 Container loadPath(const char fileName[], int interactions) {
@@ -134,9 +137,9 @@ Container loadPath(const char fileName[], int interactions) {
     //}
 
     //Inicia a matriz adjacente lida
-    Matriz matriz = MATRIZinit_int(matrizSize, matrizSize, vetorMatriz);
-    Passageiros listPassageiros = pListInit(pOrigem, pDestino, maxVal, payVal, numPassageiros);
-    Carro carro = carroInit(numCarPassageiros);
+    Matriz matriz = initMatrizWithArray_int(matrizSize, matrizSize, vetorMatriz);
+    ListPassageiros listPassageiros = initListPassageiros(pOrigem, pDestino, maxVal, payVal, numPassageiros);
+    Car carro = initCarWithVal(numCarPassageiros);
 
     Container ct = containerInit(matriz , listPassageiros, carro, interactions);
 

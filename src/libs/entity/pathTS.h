@@ -9,6 +9,7 @@
 struct travellingSalesmanPath {
     void* path;
     void* value;
+    void* totalValue;
     int pathSize;
 };
 
@@ -17,11 +18,11 @@ struct travellingSalesmanPath {
 typedef struct travellingSalesmanPath *PathTS;
  
 //INIT's
-PathTS PathTSinit_int(int* pathCaminho, int* valuePath, int pathTamanho);
+PathTS initPathTS_int(int* pathCaminho, int* valuePath, int pathTamanho);
 
 //FUNCTIONS
 //Retorna um caminho randomizado aleatorio
-PathTS PathTSrandom_int(Matriz m);
+PathTS generateRandomPathTS_int(Matriz m);
 
 PathTS optimize2opt(PathTS path, Matriz m);
 
@@ -33,14 +34,12 @@ int pTSValue_int(void* pathValues, int init, int end);
 int pathValue(int* path, int size);
 
 //Retorna um caminho aleatorio guloso 
-PathTS PathTSrandGuloso_int(Matriz m);
+PathTS generateRandGulosoPathTS_int(Matriz m);
 
 //retorna um array com o caminho selecionado de forma aleatoria e gulosa utilizando os pesos das entradas para selecionar o caminho 
 int* arrayRandGuloso_int(Matriz m);
 /*Calcula o valor total dos pesos do path recebido*/
 int pathValue(int* path, int size);
-
-
 
 
 //PRINTS's

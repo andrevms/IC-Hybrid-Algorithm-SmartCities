@@ -11,33 +11,65 @@
 
 struct container {
     Matriz m;
-    Passageiros p;
-    Carro c;
+    ListPassageiros p;
+    Car c;
     int interactions;
     PathTS* pathList;
-    Passageiros* passList;
+    ListPassageiros* passList;
     PathTS* path2optList;
-    Passageiros* pass2optList;
+    ListPassageiros* pass2optList;
+
 };
 
 /* Um Container é um ponteiro para o struct container, que armazena uma matriz m, uma quantidade de passageiros p e um veiculo c */
 typedef struct container *Container;
  
 //INIT's
-/* Cria um passageiro com seus respectivos valores*/
-Container containerInit(Matriz matriz, Passageiros pList, Carro carro, int interactions);
+
+/*
+ * \brief Cria um container
+ * \param matriz Matriz --> Matriz Pointer com a matriz adjacente do problema [NOT NULL]
+ * \param pList --> ListPassageiros Pointer com uma lista de passageiros [NOT NULL]
+ * \param carro --> Car Pointer com o carro que sera utilizado
+ * \param interactions --> Integer with the numbers of particles that we need.
+ * \return A Pointer for a Container object with all params initialized.
+ * \info Object should be dealloc with function --> freeCTattributes
+ */
+Container containerInit(Matriz matriz, ListPassageiros pList, Car carro, int interactions);
 
 //Load Files
+
+/*
+ * \brief 
+ * \param 
+ * \return 
+ * \info Object should be dealloc with function --> freeCTattributes
+ */
 Container loadPath(const char fileName[], int interactions);
 
 //Run
+/*
+ * \brief 
+ * \param
+ */
 void run(Container ct);
 
 //Free
+/*
+ * \brief 
+ * \param 
+ * \return 
+ * \info Object from param is dealloc in the function
+ */
 void freeCTattributes(Container ct);
 
 //PRINTS's
+
 /* Imprime as informações do contanier*/
+/*
+ * \brief 
+ * \param 
+ */
 void containerPrint(Container ct);
 
 #endif /* PASSAGEIRO_H_ */

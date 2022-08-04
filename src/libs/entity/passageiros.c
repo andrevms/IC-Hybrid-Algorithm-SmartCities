@@ -2,12 +2,12 @@
 
 //INIT's
 /* Cria um passageiro com seus respectivos valores*/
-Passageiros pListInit(int* entry, int* out, float* value, float* payValue, int size){
+ListPassageiros initListPassageiros(int* entry, int* out, float* value, float* payValue, int size){
     if(entry == NULL || out == NULL || value == NULL || payValue == NULL || size < 0){
         return NULL;
     }
 
-    Passageiros p = calloc(1, sizeof(*p));
+    ListPassageiros p = calloc(1, sizeof(*p));
     p->origem = entry;
     p->destino = out;
     p->valorMaximo = value;
@@ -19,7 +19,7 @@ Passageiros pListInit(int* entry, int* out, float* value, float* payValue, int s
 
 
 /*Retorna um array de passageiros que satisfazem o path*/
-Passageiros pListOnPath(Passageiros passengerList, PathTS pathTS, Carro car) {
+ListPassageiros boardPassengersOnPath(ListPassageiros passengerList, PathTS pathTS, Car car) {
 
     if (passengerList == NULL || pathTS == NULL || car == NULL)
     {
@@ -129,12 +129,12 @@ Passageiros pListOnPath(Passageiros passengerList, PathTS pathTS, Carro car) {
     free(passNoCarro);
     free(passValApagarList);
 
-    return pListInit(pAtendidosListOrigem, pAtendidosListDestino,pAtendidosListValorMaximo, pAtendidosListValorPago, numPassAtendidos);
+    return initListPassageiros(pAtendidosListOrigem, pAtendidosListDestino,pAtendidosListValorMaximo, pAtendidosListValorPago, numPassAtendidos);
 }
 
 //PRINTS's
 /* Imprime as informações do passageiro*/
-void passageiroPrint(Passageiros passengersList) {
+void printListPassengers(ListPassageiros passengersList) {
     if(passengersList != NULL) {
         printf("Imprimindo passageiros\n");
         if (passengersList->listSize == 0 ) {

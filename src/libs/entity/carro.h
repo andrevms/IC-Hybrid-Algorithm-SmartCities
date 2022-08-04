@@ -8,27 +8,27 @@ struct carro {
     int numMaxPassageiros;
 };
 
-/* Um Carro é um ponteiro para uma struct carro */
-typedef struct carro *Carro;
+/* Um Car é um ponteiro para uma struct carro */
+typedef struct carro *Car;
  
 //INIT's
 
 /*
- * \brief Inicializa um carro
+ * \brief Inicializa um carro com numero de passageiros
  * \param numCarPassageiros Integer Number of passengers that the car can take.
- * \return A Pointer for an object Carro with numMaxPassageiros with the number received.
+ * \return A Pointer for an object Car with numMaxPassageiros with the number received.
  *         NULL if parameters less then 0.
  * \info Object should be dealloc by user
  */
-Carro carroInit(int numCarPassageiros);
+Car initCarWithVal(int numCarPassageiros);
 
 //PRINTS's
 /*
- * \brief Print's car Informations
- * \param car Pointer to a carro that will be printed
+ * \brief Write Car Informations to stdout
+ * \param car --> Pointer to a car that is going to be printed
  * 
  * \info IF car NULL, will print an error message 
  */
-void carroPrint(Carro car);
+void printCar(Car car);
  
 #endif /* PASSAGEIRO_H_ */

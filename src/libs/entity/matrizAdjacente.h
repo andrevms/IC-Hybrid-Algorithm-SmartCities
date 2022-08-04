@@ -14,20 +14,63 @@ struct matrizAdjacente {
 typedef struct matrizAdjacente *Matriz;
  
 //INIT's
+
 /* Inicia os tamanhos da matriz de adjacencia : size_x = row; size_y = col; e atribui vetor a m->nodeVal*/
-Matriz MATRIZinit_int(int row, int col, int* vetor);
-/* Inicia os tamanhos da matriz de adjacencia e seu vetor com todas as entradas com o valor val */
-Matriz MATRIZinit_intVal(int row, int col, int val);
+/*
+ * \brief Inicializa uma matriz de adjacencia com linha, coluna e vetor recebidos.
+ * \param row Integer --> Number of rows.
+ * \param col Integer --> Number of columns.
+ * \param vetor Integer Pointer --> Array with matriz values. Size equal rows * columns.
+ * \return A Pointer for an object Matriz initialized with params.
+ * \info Object should be dealloc by user
+ */
+Matriz initMatrizWithArray_int(int row, int col, int* vetor);
+
+/*
+ * \brief Inicializa uma matriz de adjacencia com linha, coluna e vetor recebidos.
+ * \param row Integer --> Number of rows.
+ * \param col Integer --> Number of columns.
+ * \param val Integer --> Valor que o vetor ira receber em todas as entradas. Size equal rows * columns.
+ * \return A Pointer for an object Matriz initialized with params.
+ * \info Object should be dealloc by user
+ */
+Matriz initMatrizWithVal_int(int row, int col, int val);
+
+/*
+ * \brief Inicializa uma matriz de adjacencia com calloc.
+ * \return A Pointer for an object Matriz.
+ * \info Object should be dealloc by user
+ */
+Matriz initMatriz();
 
 
 //FUNCTIONS
-/*Retorna os elementos da linha da matriz adjacente como um array*/
-int* MATRIZlinhaPesos_int(Matriz m, int row);
-/*Retorna o peso da posição do elemento da matriz adjacente*/
-int MATRIZelementoPesos_int(Matriz m, int row, int col);
+
+/*
+ * \brief Grab a given row from a Matriz.
+ * \param m Matriz --> Matriz .
+ * \param row Integer --> Number of the row selected.
+ * \param vetor Integer Pointer --> Array with matriz values. Size equal rows * columns.
+ * \return A Integer Pointer with the row values selected .
+ * \info Object should be dealloc by user
+ */
+int* getRowValues_int(Matriz m, int row);
+
+/*
+ * \brief Grab an elemento from Matriz.
+ * \param m Matriz --> Matriz adjacente com os valores ja inicializados.
+ * \param row Integer --> Number of the row selected.
+ * \param col Integer --> Number of the col selected.
+ * \return A Integer with the value of the [row][col] selected .
+ */
+int getElementValue_int(Matriz m, int row, int col);
 
 //PRINTS's
-/* Imprime as informações do matriz de inteiros: size_x; size_y; nodeVal -> size = [row * cow] */
-void MATRIZprint_int(Matriz m);
+
+/*
+ * \brief Write Matriz info on stdout
+ * \param m Matriz --> Matriz adjacente with values [NOT NULL].
+ */
+void printMatriz_int(Matriz m);
  
 #endif /* MATRIZ_ADJACENTE_H_ */

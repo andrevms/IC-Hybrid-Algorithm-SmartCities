@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <container.h>
 
-#define INTERACTIONS 50
+#define INTERACTIONS 1
 
 void main(int argc, char const *argv[])
 {

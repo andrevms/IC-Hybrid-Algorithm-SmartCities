@@ -23,12 +23,12 @@ void containerPrint(Container ct){
 
     printf("\nInteraction %d\n", i);
     printf("\nPathTSrandGuloso %d\n", i);
-    PathTSprint_int(ct->pathList[i]);
+    printPathTS_int(ct->pathList[i]);
     printf("\nPassageiros\n");
     printListPassengers(ct->passList[i]);
 
     printf("\nResultados 2opt\n");
-    PathTSprint_int(ct->path2optList[i]);
+    printPathTS_int(ct->path2optList[i]);
     printf("\nPassageiros 2opt\n");
     printListPassengers(ct->pass2optList[i]);
   }

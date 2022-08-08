@@ -54,7 +54,7 @@ Matriz initMatriz();
  * \return A Integer Pointer with the row values selected .
  * \info Object should be dealloc by user
  */
-int* getRowValues_int(Matriz m, int row);
+int* getMatrizRowValues_int(Matriz m, int row);
 
 /*
  * \brief Grab an elemento from Matriz.
@@ -63,7 +63,7 @@ int* getRowValues_int(Matriz m, int row);
  * \param col Integer --> Number of the col selected.
  * \return A Integer with the value of the [row][col] selected .
  */
-int getElementValue_int(Matriz m, int row, int col);
+int getMatrizElementValue_int(Matriz m, int row, int col);
 
 //PRINTS's
 
@@ -72,5 +72,17 @@ int getElementValue_int(Matriz m, int row, int col);
  * \param m Matriz --> Matriz adjacente with values [NOT NULL].
  */
 void printMatriz_int(Matriz m);
+
+
+/*
+ * \brief Write Matriz info on the end of a File
+ * \param fileName --> Name of the file that will be write
+ * \param m Matriz --> Matriz adjacente with values [NOT NULL].
+ */
+void printMatrizInFile_int(const char fileName[], Matriz m);
+
+
+//FREE
+void freeMatriz(Matriz m);
  
 #endif /* MATRIZ_ADJACENTE_H_ */

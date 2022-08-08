@@ -40,7 +40,7 @@ Matriz initMatriz() {
 //Functions
 
 /**/
-int* getRowValues_int(Matriz m, int row){
+int* getMatrizRowValues_int(Matriz m, int row){
     int* pesosEntradas = calloc (m->size_x, sizeof(int));
 
     for (int i = 0; i < m->size_x; i++)
@@ -52,7 +52,7 @@ int* getRowValues_int(Matriz m, int row){
 }
 
 /**/
-int getElementValue_int(Matriz m, int row, int col){
+int getMatrizElementValue_int(Matriz m, int row, int col){
     if(row > m->size_x || col > m->size_y){
         printf("Erro MATRIZelemntoPesos_int, acesso indevido de variavel");
         exit(-1);
@@ -83,4 +83,55 @@ void printMatriz_int(Matriz m) {
         printf("Matriz adjacente ainda não definida\n");
     }
     printf("\n\n");
+}
+
+/**/
+void printMatrizInFile_int(const char fileName[], Matriz m){
+    FILE *fp;
+    int result;
+
+    if ( (fp= fopen(fileName, "a+") ) != NULL) {
+        
+        if(m != NULL) {
+            result = fprintf(fp,"Numero de linhas = %d\nNumero de colunas = %d\n", m->size_x, m->size_y);
+            if (result == EOF) {
+                printf("Erro na Gravacao printMatirzInFile_int m->size_x, m->size_y\n");	
+                exit(-1);
+            }
+
+            int last_val = m->size_x * m->size_y;
+
+            if(m->nodeVal != NULL) {
+                for (int i = 0; i < last_val; i++) {
+                    if (i%m->size_y == 0)
+                    {
+                        result = fprintf(fp,"\n%d ", *(((int*)m->nodeVal)+i));
+                        if (result == EOF) { //Testes se salvou direito
+                            printf("Erro na Gravacao printMatirzInFile_int m->size_x, m->size_y\n");	
+                            exit(-1);
+                        } 
+                    } else{
+                        result = fprintf(fp,"%d ", *(((int*)m->nodeVal)+i));
+                        if (result == EOF) {
+                            printf("Erro na Gravacao printMatirzInFile_int m->size_x, m->size_y\n");	
+                            exit(-1);
+                        }
+                    }
+                }
+                fprintf(fp,"\n\n");
+            }
+        } else {
+           result = fprintf(fp,"Matriz Not Well defined");  					    	 
+        }
+        fclose(fp);
+    }else {
+        printf("Erro na Gravacao aqui\n");				    	 
+    }
+}
+
+//FREE
+
+void freeMatriz(Matriz m) {
+    free(m->nodeVal);
+    free(m);
 }

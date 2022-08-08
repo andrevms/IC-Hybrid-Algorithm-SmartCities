@@ -13,8 +13,7 @@ typedef struct carro *Car;
  
 //INIT's
 
-/*
- * \brief Inicializa um carro com numero de passageiros
+/*\brief Inicializa um carro com numero de passageiros
  * \param numCarPassageiros Integer Number of passengers that the car can take.
  * \return A Pointer for an object Car with numMaxPassageiros with the number received.
  *         NULL if parameters less then 0.
@@ -23,12 +22,23 @@ typedef struct carro *Car;
 Car initCarWithVal(int numCarPassageiros);
 
 //PRINTS's
-/*
- * \brief Write Car Informations to stdout
+/* \brief Write Car Informations to stdout
  * \param car --> Pointer to a car that is going to be printed
  * 
  * \info IF car NULL, will print an error message 
  */
 void printCar(Car car);
- 
-#endif /* PASSAGEIRO_H_ */
+
+/*\brief Write Car Informations to the end of a file
+ * \param fileName --> Name of the file that will be write
+ * \param car --> Pointer to a car that is going to be printed
+ * 
+ * \info IF car NULL, will print an error message 
+ */ 
+void printCarInFile(const char fileName[], Car car);
+
+/*\brief Free a Car Pointer
+ */ 
+void freeCar(Car c);
+
+#endif /* CARRO_H_ */

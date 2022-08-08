@@ -11,10 +11,36 @@ Car initCarWithVal(int numCarPassageiros) {
 }
 
 void printCar(Car car){
-     if(car != NULL){
+     if(car != NULL) {
         printf("Imprimindo carro\n");
-        printf("Tamanho do Car : %d \n", car->numMaxPassageiros);
+        printf("Car Size : %d\n", car->numMaxPassageiros);
     }else {
         printf("Car mal definido\n");
     }
+}
+
+void printCarInFile(const char fileName[], Car car){
+    FILE *fp;
+    int result;
+
+    if ( (fp= fopen(fileName, "a+") ) != NULL) {
+        
+        if(car != NULL) {
+            result = fprintf(fp,"Car Size : %d\n", car->numMaxPassageiros);  					          
+        } else {
+           result = fprintf(fp,"Car Not Well defined");  					    	 
+        }
+
+        if (result == EOF) {
+            printf("Erro na Gravacao aqui\n");	
+        }
+        
+        fclose(fp);
+    }else {
+        printf("Erro na Gravacao aqui\n");				    	 
+    }
+}
+
+void freeCar(Car c) {
+    free(c);
 }

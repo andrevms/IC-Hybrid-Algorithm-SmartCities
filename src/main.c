@@ -1,21 +1,20 @@
 #include <stdio.h>
+#include <string.h>
 #include <container.h>
 
-#define INTERACTIONS 1
+#define IteractionsMultiStart 100
+#define ParticleSwarmOp 20
+#define IteractionsSwarmOp 10
 
-void main(int argc, char const *argv[])
+void main(int argc, char *argv[])
 {
   srand(time(NULL));
   
-  for (size_t i = 1; i < argc; i++)
+  for (size_t i = 1; i < argc; i = i + 2)
   {
     printf("\nArquivo %s\n", argv[i]);
-    Container ct = loadPath(argv[i], INTERACTIONS);
-    printf("Iniciando algoritmo\n");
-    run(ct);
-    
-    containerPrint(ct);
-    printf("Desalocando memoria\n");
+    Container ct = loadPath(argv[i], IteractionsMultiStart, ParticleSwarmOp, IteractionsSwarmOp);
+    run(ct, argv[i+1]);
     freeCTattributes(ct);
     printf("Finalizado\n");
   }

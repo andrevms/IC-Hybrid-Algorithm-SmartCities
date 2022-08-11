@@ -12,11 +12,14 @@ add_executable(
     libs/entity/passageiros.h libs/entity/passageiros.c
     libs/entity/carro.h libs/entity/carro.c
     libs/entity/container.h libs/entity/container.c
-    
+
+    libs/algorithms/multiStartWith2opt.h libs/algorithms/multiStartWith2opt.c
+    libs/algorithms/pathRandAleatorizado.h libs/algorithms/pathRandAleatorizado.c
+    libs/algorithms/particleSwarmOp.h libs/algorithms/particleSwarmOp.c
     main.c
 )
 
 target_include_directories(
     IC-HYBRID-ALGORITHM-SMARTCITIES
-    PRIVATE libs/entity
+    PRIVATE libs/entity libs/algorithms
     )

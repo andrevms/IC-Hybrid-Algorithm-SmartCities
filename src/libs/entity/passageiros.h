@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <pathTS.h>
 #include <carro.h>
+#include <matrizAdjacente.h>
 
 struct passageiros {
     int* origem;
@@ -45,7 +46,7 @@ ListPassageiros initListPassageiros(int* entry, int* out, float* value, float* p
  * 
  * \info Object should be dealloc by user
  */
-ListPassageiros boardPassengersOnPath(ListPassageiros passengersList, PathTS pathTS, Car car);
+ListPassageiros boardPassengersOnPath(ListPassageiros passengersList, PathTS pathTS, Car car, Matriz m);
 
 //PRINTS's
 
@@ -54,5 +55,15 @@ ListPassageiros boardPassengersOnPath(ListPassageiros passengersList, PathTS pat
  * \param passengersList Passenger Pointer --> Passengers that will be printed
  */
 void printListPassengers(ListPassageiros passengersList);
- 
+
+
+/*
+ * \brief Write Passengers Informations on file
+ *\param fileName --> Name of the file that will be write
+ * \param passengersList Passenger Pointer --> Passengers that will be printed
+ */
+void printListPassengersInFile(const char fileName[], ListPassageiros passengersList);
+
+
+void freeListPassengers(ListPassageiros p);
 #endif /* PASSAGEIRO_H_ */

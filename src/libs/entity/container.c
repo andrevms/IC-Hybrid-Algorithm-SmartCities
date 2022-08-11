@@ -1,94 +1,23 @@
 #include <container.h>
 
-Container containerInit( Matriz matriz, ListPassageiros pList, Car carro, int interactions){
+Container containerInit( Matriz matriz, 
+                        ListPassageiros pList, 
+                        Car carro, 
+                        int numIteractionsMultiStart, 
+                        int numParticleSwarmOp, 
+                        int numIteractionsSwarmOp) {
     Container ct = calloc ( 1, sizeof(*ct));
     ct->m = matriz;
     ct->p = pList;
     ct->c = carro;
-    ct->interactions = interactions;
-    ct->pathList = calloc( interactions, sizeof(*ct->pathList));
-    ct->passList = calloc( interactions, sizeof(*ct->passList));
-    ct->path2optList = calloc( interactions, sizeof(*ct->path2optList));
-    ct->pass2optList = calloc( interactions, sizeof(*ct->pass2optList));
+    ct->numIteractionsMultiStart = numIteractionsMultiStart;
+    ct->numParticleSwarmOp = numParticleSwarmOp;
+    ct->numIteractionsSwarmOp = numIteractionsSwarmOp;
     return ct;
 }
 
-void containerPrint(Container ct){
-  printMatriz_int(ct->m);
-  printListPassengers(ct->p);
-  printCar(ct->c);
-
-  for (int i = 0; i <  ct->interactions; i++)
-  {
-
-    printf("\nInteraction %d\n", i);
-    printf("\nPathTSrandGuloso %d\n", i);
-    printPathTS_int(ct->pathList[i]);
-    printf("\nPassageiros\n");
-    printListPassengers(ct->passList[i]);
-
-    printf("\nResultados 2opt\n");
-    printPathTS_int(ct->path2optList[i]);
-    printf("\nPassageiros 2opt\n");
-    printListPassengers(ct->pass2optList[i]);
-  }
-}
-
-void run(Container ct){
-  for (int i = 0; i <  ct->interactions; i++)
-  {
-    ct->pathList[i] = generateRandGulosoPathTS_int(ct->m);
-    ct->passList[i] = boardPassengersOnPath(ct->p, ct->pathList[i], ct->c);
-    ct->path2optList[i] = optimize2opt(ct->pathList[i], ct->m);
-    ct->pass2optList[i] = boardPassengersOnPath(ct->p, ct->path2optList[i], ct->c);
-  }
-}
-
-
-void freeCTattributes(Container ct) {
-  for (int i = 0; i < ct->interactions; i++)
-  {
-    
-    free(ct->pathList[i]->path);
-    free(ct->pathList[i]->value);
-    free(ct->pathList[i]->totalValue);
-    free(ct->pathList[i]);
-
-    free(ct->path2optList[i]->path);
-    free(ct->path2optList[i]->value);
-    free(ct->path2optList[i]->totalValue);
-    free(ct->path2optList[i]);
-    
-    free(ct->pass2optList[i]->destino);
-    free(ct->pass2optList[i]->origem);
-    free(ct->pass2optList[i]->valorMaximo);
-    free(ct->pass2optList[i]->valorPago);
-    free(ct->pass2optList[i]);
-
-    free(ct->passList[i]->destino);
-    free(ct->passList[i]->origem);
-    free(ct->passList[i]->valorMaximo);
-    free(ct->passList[i]->valorPago);
-    free(ct->passList[i]);
-  }
-  
-  free(ct->pathList);
-  free(ct->passList);
-  free(ct->pass2optList);
-  free(ct->path2optList);
-  
-  free(ct->m->nodeVal);
-  free(ct->m);
-  free(ct->p->destino);
-  free(ct->p->origem);
-  free(ct->p->valorMaximo);
-  free(ct->p->valorPago);
-  free(ct->p);
-  free(ct->c);
-  free(ct);
-}
-
-Container loadPath(const char fileName[], int interactions) {
+/**/
+Container loadPath(const char fileName[], int numIteractionsMultiStart, int numParticleSwarmOp, int numIteractionsSwarmOp) {
 
     FILE *fp;
 
@@ -141,9 +70,37 @@ Container loadPath(const char fileName[], int interactions) {
     ListPassageiros listPassageiros = initListPassageiros(pOrigem, pDestino, maxVal, payVal, numPassageiros);
     Car carro = initCarWithVal(numCarPassageiros);
 
-    Container ct = containerInit(matriz , listPassageiros, carro, interactions);
-
-
-    printf("Arquivos loaded\n");
+    Container ct = containerInit(matriz , listPassageiros, carro, numIteractionsMultiStart, numParticleSwarmOp, numIteractionsSwarmOp);
     return ct;
+}
+
+void run(Container ct, char filePath[]) {
+  //runPathRand(ct->numIteractionsMultiStart, ct->m, ct->p, ct->c, filePath);
+  //runMultiStartWith2opt(ct->numIteractionsMultiStart, ct->m, ct->p, ct->c, filePath);
+  runParticleSwarmOp(ct->numIteractionsSwarmOp, ct->numParticleSwarmOp, ct->m, ct->p, ct->c, filePath);
+}
+
+
+/**/
+void freeCTattributes(Container ct) {
+  freeMatriz(ct->m);
+  freeListPassengers(ct->p);
+  free(ct->c);
+  free(ct);
+}
+
+/**/
+void printContainer(Container ct){
+  printMatriz_int(ct->m);
+  printListPassengers(ct->p);
+  printCar(ct->c);
+}
+
+/**/
+void printContainerInFile(const char fileName[], Container ct) {
+  FILE *fp;
+
+  printCarInFile(fileName, ct->c);
+  printMatrizInFile_int(fileName, ct->m);
+  printListPassengersInFile(fileName, ct->p);
 }

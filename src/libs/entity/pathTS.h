@@ -32,82 +32,23 @@ typedef struct travellingSalesmanPath *PathTS;
  * \param 
  * \return 
  */
-PathTS initPathTS_int(int* pathCaminho, int* valuePath, int pathTamanho);
+PathTS iPathTS_int(int* pathCaminho, int* valuePath, int pathTamanho);
 
-PathTS callocPathTS_int(int pathSize);
+PathTS initPathTS_int(int* pathCaminho, int* valuePath, int pathTamanho, int numPassengers);
+
 //FUNCTIONS
 
 int calculePathValue(int* pathCaminho, int pathTamanho, Matriz m);
-/*
- * \brief 
- * \param 
- * \param 
- * \param 
- * \return 
- * 
- * \info Object should be dealloc by user
- */
-PathTS optimize2opt(PathTS path, Matriz m);
-PathTS iPathTS_int(int* pathCaminho, int* valuePath, int pathTamanho);
-/*
- * \brief 
- * \param pTS PathTS Pointer --> Caminho a ser reordenado
- * \param 
- * \param 
- * \return 
- * 
- * \info Object should be dealloc by user
- */
-void* swap2opt(PathTS pTS, int swapBegin, int swapEnd);
-
-int* swap2opt_int(int* path, int pathSize, int swapBegin, int swapEnd);
-
-
-/*
- * \brief 
- * \param 
- * \param 
- * \param 
- * \return 
- * 
- * \info Object should be dealloc by user
- */
 int sumArrayElements(int* path, int size);
-
-/*Calcula o valor total dos pesos do path recebido*/
-
-/*
- * \brief 
- * \param 
- * \param 
- * \param 
- * \return 
- * 
- * \info Object should be dealloc by user
- */
-int sumArrayElements(int* path, int size);
-
+ 
+int positionValue_int(void* path, int size, int number);
+int pTSValue_int(void* pathValues, int init, int end, Matriz m);
 
 //PRINTS's
 
-/*
- * \brief Write PathTS Informations to stdout
- * \param PathTS travellingSalesmanPath Pointer --> travellingSalesmanPath that will be printed
- */
-void printPathTS_int(PathTS p, Matriz m);
-
-/*
- * \brief Write PathTS Informations on the end of a file
- * \param fileName --> Name of the file that will be write
- * \param PathTS travellingSalesmanPath Pointer --> travellingSalesmanPath that will be printed
- */
+void printPathTS_int(PathTS p, Matriz m, int contador);
 void printPathTSInFile_int(const char fileName[], PathTS p, Matriz m, int contador);
-
-void freePath(PathTS pTS); 
-int positionValue_int(void* path, int size, int number);
-
-
-int pTSValue_int(void* pathValues, int init, int end, Matriz m);
-
+void freePath(PathTS pTS);
+PathTS copyPath(PathTS pTS);
 
 #endif /* CAMINHO_H_ */

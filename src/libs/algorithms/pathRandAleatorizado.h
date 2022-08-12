@@ -30,4 +30,6 @@ int* arrayRandAleatorio_int(Matriz m);
  */ 
 PathTS generateRandomPathTS_int(Matriz m);
 
+PathTS generateRandomPathTSWithPassageiros_int(Matriz m, ListPassageiros p, Car c);
+
 #endif /* PATHRANDALEATORIZADO_H_ */

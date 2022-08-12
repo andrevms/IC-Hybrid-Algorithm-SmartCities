@@ -11,7 +11,7 @@ void runPathRand( int numIteractions, Matriz m, ListPassageiros p, Car c, char f
     for (size_t i = 0; i < numIteractions; i++){ pathsList[i] = generateRandomPathTS_int(m); }
     
     //Inserindo passageiros nos Caminhos
-    ListPassageiros* passageirosList = calloc(numIteractions, sizeof(PathTS));
+    ListPassageiros* passageirosList = calloc(numIteractions, sizeof(ListPassageiros));
     for (size_t i = 0; i < numIteractions; i++){ 
         passageirosList[i] = boardPassengersOnPath(p, pathsList[i], c, m);  
         pathsList[i]->numPassengersOnPath = passageirosList[i]->listSize; 
@@ -147,3 +147,22 @@ PathTS generateRandomPathTS_int(Matriz m) {
    return p;
 }
 
+PathTS generateRandomPathTSWithPassageiros_int(Matriz m, ListPassageiros p, Car c){
+    int* arrayRand = arrayRandAleatorio_int(m);
+    int * arrayTotalVal = calloc(1,sizeof(int));
+
+    for (int i = 0; i < m->size_x; i++) {  
+        int positBegin = arrayRand[i];
+        int positEnd = arrayRand[i+1];
+        arrayTotalVal[0] += getMatrizElementValue_int(m,positBegin, positEnd);
+    }
+
+    PathTS newPath = iPathTS_int (arrayRand, arrayTotalVal, m->size_x+1);
+    //Inserindo passageiros nos Caminhos
+    ListPassageiros passageirosList =  boardPassengersOnPath(p, newPath, c, m);  
+    newPath->numPassengersOnPath = passageirosList->listSize;
+
+    freeListPassengers(passageirosList);
+
+   return newPath;
+}

@@ -7,7 +7,6 @@ void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car 
     struct timeval start, end;
     gettimeofday(&start, NULL);
  
-    
     PathTS* pathsList = calloc(numIteractions, sizeof(PathTS));
     PathTS* auxPathList = calloc(numIteractions, sizeof(PathTS));
 
@@ -19,7 +18,7 @@ void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car 
     }
 
     //Inserindo passageiros nos Caminhos
-    ListPassageiros* passageirosList = calloc(numIteractions, sizeof(PathTS));
+    ListPassageiros* passageirosList = calloc(numIteractions, sizeof(ListPassageiros));
     for (size_t i = 0; i < numIteractions; i++){ 
         passageirosList[i] = boardPassengersOnPath(p, pathsList[i], c, m);  
         pathsList[i]->numPassengersOnPath = passageirosList[i]->listSize; 
@@ -93,7 +92,6 @@ void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car 
     free(fileName);
 }
 
-
 int* arrayRandGuloso_int(Matriz m){
     int mSizePlus1 = m->size_x +1;
     int mSizeMinus1 = m->size_x -1;
@@ -166,7 +164,6 @@ PathTS generateRandGulosoPathTS_int(Matriz m) {
     PathTS p = iPathTS_int(pathResult, valueCaminho, m->size_x+1); 
     return p;
 }
-
 
 /**/
 PathTS optimize2opt(PathTS pTS, Matriz m) {

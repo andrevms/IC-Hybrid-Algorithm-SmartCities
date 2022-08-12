@@ -47,6 +47,7 @@ ListPassageiros initListPassageiros(int* entry, int* out, float* value, float* p
  * \info Object should be dealloc by user
  */
 ListPassageiros boardPassengersOnPath(ListPassageiros passengersList, PathTS pathTS, Car car, Matriz m);
+ListPassageiros boardPassengers(ListPassageiros passengerList, int* pathTS, Car car, Matriz m);
 
 //PRINTS's
 

@@ -13,6 +13,15 @@ PathTS iPathTS_int(int* pathCaminho, int* valuePath, int pathTamanho) {
     return p;
 }
 
+PathTS initPathTS_int(int* pathCaminho, int* valuePath, int pathTamanho, int numPassengers) {
+    PathTS p = calloc (1,sizeof(*p));
+    p->path = pathCaminho;
+    p->totalValue = valuePath;
+    p->pathSize = pathTamanho;
+    p->numPassengersOnPath = numPassengers;
+    return p;
+}
+
 //FUNCTIONS
 
 int calculePathValue(int* pathCaminho, int pathTamanho, Matriz m){
@@ -23,7 +32,6 @@ int calculePathValue(int* pathCaminho, int pathTamanho, Matriz m){
 
     return val;
 }
-
 
 /**/
 int sumArrayElements(int* path, int size){
@@ -37,9 +45,13 @@ int sumArrayElements(int* path, int size){
 }
 
 //PRINT's
-void printPathTS_int(PathTS p, Matriz m) {
+void printPathTS_int(PathTS p, Matriz m, int contador) {
      if(p->path != NULL) {
             //Imprime caminho
+            if (contador != -1)
+            {
+               fprintf(stdout, "Path %d\n", contador);
+            }
             fprintf(stdout, "Path = ");
             for (size_t i = 0; i < p->pathSize; i++) {
                 fprintf(stdout, "%d ", *(((int*)p->path)+i)); 
@@ -130,4 +142,21 @@ int pTSValue_int(void* pathValues, int init, int end, Matriz m) {
         value += getMatrizElementValue_int(m, positBegin, positEnd);
     }
     return value;
+}
+
+PathTS copyPath(PathTS pTS) {
+
+    //Armazena os valores do Path
+    int* auxPath = calloc (pTS->pathSize, sizeof(int));
+    for (size_t i = 0; i < pTS->pathSize; i++){ auxPath[i] = *(((int*)pTS->path)+i); }
+    //Armazena o valor total do caminho
+    int* auxTotalValuePath = calloc (1, sizeof(int));
+    auxTotalValuePath[0] = *(((int*)pTS->totalValue));
+    //Armazena o tamanho do auxPath
+    int auxPathSize = pTS->pathSize;
+    //Armazena o numero de passageiros
+    int auxNumPassageiros = pTS->numPassengersOnPath;
+    
+    //Atribuindo as variaveis a um novo PathTS que sera utilizado no algoritmo
+   return initPathTS_int(auxPath, auxTotalValuePath, auxPathSize, auxNumPassageiros);
 }

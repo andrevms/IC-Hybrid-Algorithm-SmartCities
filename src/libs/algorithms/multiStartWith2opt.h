@@ -32,4 +32,9 @@ int* arrayRandGuloso_int(Matriz m);
  */
 PathTS generateRandGulosoPathTS_int(Matriz m);
 
+
+PathTS optimize2opt(PathTS pTS, Matriz m);
+void* swap2opt(PathTS pTS, int swapBegin, int swapEnd);
+int* swap2opt_int(int* path, int pathSize, int swapBegin, int swapEnd);
+
 #endif /* MULTISTARTWITH2OPT_H_ */

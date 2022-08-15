@@ -143,7 +143,8 @@ PathTS particleSwarmOp(int numParticles, Matriz m, ListPassageiros p, Car c) {
             //fprintf(stdout, "velocidade %d\n",velocidade);
             PathTS aux;
             if(velocidade < pr1*100) {
-                aux = pathRelinking (particlesPathList[i], particlesPathList[i], particlesPathList[i]->pathSize, m, p, c);
+                aux = optimize2opt(particlesPathList[i], m);
+                //aux = pathRelinking (particlesPathList[i], particlesPathList[i], particlesPathList[i]->pathSize, m, p, c);
                 //fprintf(stdout, "entrou em particles\n");
             }else if ( velocidade < (pr1+pr2)*100){
                 //fprintf(stdout, "entrou em pbest\n");

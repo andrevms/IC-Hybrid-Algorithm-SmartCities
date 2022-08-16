@@ -259,6 +259,8 @@ ListPassageiros boardPassengers(ListPassageiros passengerList, int* pathTS, Car 
 
     return initListPassageiros(pAtendidosListOrigem, pAtendidosListDestino,pAtendidosListValorMaximo, pAtendidosListValorPago, numPassAtendidos);
 }
+
+
 //PRINTS's
 /* Imprime as informações do passageiro*/
 void printListPassengers(ListPassageiros passengersList) {

@@ -2,7 +2,7 @@
 #include <string.h>
 #include <container.h>
 
-#define IteractionsMultiStart 100
+#define IteractionsMultiStart 200
 #define ParticleSwarmOp 20
 #define IteractionsSwarmOp 10
 

@@ -13,15 +13,9 @@ void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car 
     //Gerando os Caminhos Aleatorios
     //Armazena o inicial e o optimizado
     for (size_t i = 0; i < numIteractions; i++){ 
-        auxPathList[i] = generateRandGulosoPathTS_int(m);
-        pathsList[i] =  optimize2opt(auxPathList[i], m);
-    }
-
-    //Inserindo passageiros nos Caminhos
-    ListPassageiros* passageirosList = calloc(numIteractions, sizeof(ListPassageiros));
-    for (size_t i = 0; i < numIteractions; i++){ 
-        passageirosList[i] = boardPassengersOnPath(p, pathsList[i], c, m);  
-        pathsList[i]->numPassengersOnPath = passageirosList[i]->listSize; 
+        auxPathList[i] = generateRandGulosoPathTS_int(m, p, c);
+        //Inserindo passageiros nos Caminhos
+        pathsList[i] =  optimize2optWithPassageiros_int(auxPathList[i], m, p, c);
     }
 
     //Finaliza o Calculo do tempo aqui
@@ -83,12 +77,10 @@ void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car 
     for (size_t i = 0; i < numIteractions; i++) { 
         freePath(pathsList[i]); 
         freePath(auxPathList[i]);
-        freeListPassengers(passageirosList[i]);
     }
     
     free(pathsList);
     free(auxPathList);
-    free(passageirosList);
     free(fileName);
 }
 
@@ -148,7 +140,7 @@ int* arrayRandGuloso_int(Matriz m){
     return entradasPath;
 }
 
-PathTS generateRandGulosoPathTS_int(Matriz m) {
+PathTS generateRandGulosoPathTS_int(Matriz m, ListPassageiros p, Car c) {
     int* pathResult = arrayRandGuloso_int(m);
      //Calculando custo do caminho
 
@@ -161,8 +153,13 @@ PathTS generateRandGulosoPathTS_int(Matriz m) {
     }
     //printf("Custo do caminho : %d\n", *valueCaminho);
 
-    PathTS p = iPathTS_int(pathResult, valueCaminho, m->size_x+1); 
-    return p;
+    ListPassageiros passageirosList = boardPassengers(p, pathResult, c, m);  
+    int numPassageiroOnPath = passageirosList->listSize; 
+    
+    freeListPassengers(passageirosList);
+
+    PathTS pTS = initPathTS_int(pathResult, valueCaminho, m->size_x+1, numPassageiroOnPath); 
+    return pTS;
 }
 
 /**/
@@ -215,6 +212,77 @@ PathTS optimize2opt(PathTS pTS, Matriz m) {
                         break;
                     }
 
+                    free(newRouteTotalValue);
+                    free(newRoute);
+                }
+                if(improvement == 1){
+                    break;
+                }
+            }
+        } while(improvement == 1);
+
+    return oldPath;
+}
+
+
+PathTS optimize2optWithPassageiros_int(PathTS pTS, Matriz m, ListPassageiros p, Car c) {
+    PathTS oldPath = calloc (1, sizeof(*oldPath));
+    
+    //Evitar que o pTS que seja desalocado criando uma copia 
+    
+    //Armazena os valores do Path
+    int* auxPath = calloc (pTS->pathSize, sizeof(int));
+    for (size_t i = 0; i < pTS->pathSize; i++){ auxPath[i] = *(((int*)pTS->path)+i); }
+    //Armazena o valor total do caminho
+    int* auxTotalValuePath = calloc (1, sizeof(int));
+    auxTotalValuePath[0] = *(((int*)pTS->totalValue));
+    //Armazena o tamanho do auxPath
+    int auxPathSize = pTS->pathSize;
+    int auxNumPassageiros = pTS->numPassengersOnPath;
+    
+    //Atribuindo as variaveis a um novo PathTS que sera utilizado no algoritmo
+    oldPath->path = auxPath;
+    oldPath->pathSize = auxPathSize;
+    oldPath->totalValue = auxTotalValuePath;
+    oldPath->numPassengersOnPath = auxNumPassageiros;
+
+
+    int mSize = m->size_x;
+    int mSizePlus1 = m->size_x +1;
+    int mSizeMinus1 = m->size_x -1;
+    
+    // Inicio do algoritmo
+    int improvement = 0;
+    do {
+            improvement = 0;
+
+            for (int i = 1; i < mSizePlus1; i++) {
+                for (int j = i + 1; j < mSize; j++) {
+
+                    //Nova rota
+                    int* newRoute = swap2opt(oldPath, i, j);
+                    //Valor do path
+                    int* newRouteTotalValue = calloc(1, sizeof(int));
+                    newRouteTotalValue[0] = calculePathValue(newRoute, mSizePlus1, m);
+                    //Numero de passageiros
+                    ListPassageiros passageirosList = boardPassengers(p, newRoute, c, m);
+                    int newNumPassageirosOnPath = passageirosList->listSize;
+
+                    //Condição de melhoria
+                    if( (newRouteTotalValue[0] < *(((int*)oldPath->totalValue)) && (newNumPassageirosOnPath >= oldPath->numPassengersOnPath) ) ||
+                    ((newRouteTotalValue[0] <= *(((int*)oldPath->totalValue)) && newNumPassageirosOnPath > oldPath->numPassengersOnPath)))
+                    { 
+                        //printf("\nEntrou aqui %d , old %d  ", newRouteValue , oldRouteValue);printf("\nnewRoute : ");for (size_t i = 0; i < 11; i++){printf("%d ", newRoute[i]);}printf("\nnewPesos : ");for (size_t i = 0; i < 10; i++){printf("%d ", newPesosRoute[i]);}printf("\n\n");
+                    
+                        free(oldPath->path);
+                        free(oldPath->totalValue);
+                        free(oldPath);
+                        oldPath = initPathTS_int(newRoute, newRouteTotalValue, mSizePlus1, newNumPassageirosOnPath);
+                        improvement = 1;
+                        freeListPassengers(passageirosList);
+                        break;
+                    }
+                    freeListPassengers(passageirosList);
                     free(newRouteTotalValue);
                     free(newRoute);
                 }

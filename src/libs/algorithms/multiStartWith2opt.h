@@ -30,8 +30,9 @@ int* arrayRandGuloso_int(Matriz m);
  * \param m --> Matriz pointer with node values 
  * \return Um PathTS com o caminho Guloso randomizado por pesos
  */
-PathTS generateRandGulosoPathTS_int(Matriz m);
+PathTS generateRandGulosoPathTS_int(Matriz m, ListPassageiros p, Car c);
 
+PathTS optimize2optWithPassageiros_int(PathTS pTS, Matriz m, ListPassageiros p, Car c);
 
 PathTS optimize2opt(PathTS pTS, Matriz m);
 void* swap2opt(PathTS pTS, int swapBegin, int swapEnd);

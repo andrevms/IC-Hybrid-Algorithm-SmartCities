@@ -13,7 +13,7 @@ void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car 
     //Gerando os Caminhos Aleatorios
     //Armazena o inicial e o optimizado
     for (size_t i = 0; i < numIteractions; i++){ 
-        auxPathList[i] = generateRandGulosoPathTS_int(m, p, c);
+        auxPathList[i] = generateRandomPathTSWithPassageiros_int(m, p, c);
         //Inserindo passageiros nos Caminhos
         pathsList[i] =  optimize2optWithPassageiros_int(auxPathList[i], m, p, c);
     }
@@ -54,6 +54,88 @@ void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car 
     char* fileName = calloc(100, sizeof(char));
     strcpy(fileName, filePath);
     strcat(fileName, "multiStartWith2opt.txt");
+
+    FILE *fp;
+
+    if ( (fp= fopen(fileName, "w+") ) != NULL) {
+        fprintf(fp, "Tempo de execução em segundos %lds\nTempo de execução em microsegundos %ld\n", seconds, micros);
+        fprintf(fp, "Valor Medio dos caminho : %f\n", mediaCaminhos);
+        fprintf(fp, "Valor Medio dos embarcados passageiros : %f\n\n", mediaPassageiros);
+        fprintf(fp, "Melhor caminho: ");
+        fclose(fp); 
+    }
+
+    //Imprimindo melhor caminho
+    printPathTSInFile_int(fileName, pathsList[indiceMelhorCaminho], m, indiceMelhorCaminho);
+    //Imprimindo caminhos on file
+    for (size_t i = 0; i < numIteractions; i++) {
+        //printPathTSInFile_int(fileName, auxPathList[i], m, i); 
+        printPathTSInFile_int(fileName, pathsList[i], m, i); 
+    }
+
+    //Desalloc
+    for (size_t i = 0; i < numIteractions; i++) { 
+        freePath(pathsList[i]); 
+        freePath(auxPathList[i]);
+    }
+    
+    free(pathsList);
+    free(auxPathList);
+    free(fileName);
+}
+
+void runGRASPwith2opt( int numIteractions, Matriz m, ListPassageiros p, Car c, char filePath[]) {
+     //Calcular tempo iniciando aqui
+    struct timeval start, end;
+    gettimeofday(&start, NULL);
+ 
+    PathTS* pathsList = calloc(numIteractions, sizeof(PathTS));
+    PathTS* auxPathList = calloc(numIteractions, sizeof(PathTS));
+
+    //Gerando os Caminhos Aleatorios
+    //Armazena o inicial e o optimizado
+    for (size_t i = 0; i < numIteractions; i++){ 
+        auxPathList[i] = generateRandGulosoPathTS_int(m, p, c);
+        //Inserindo passageiros nos Caminhos
+        pathsList[i] =  optimize2optWithPassageiros_int(auxPathList[i], m, p, c);
+    }
+
+    //Finaliza o Calculo do tempo aqui
+    gettimeofday(&end, NULL);
+ 
+    //Encontra Melhor Caminho
+    int indiceMelhorCaminho = 0;
+    int valMelhorCaminho = *(((int*)pathsList[indiceMelhorCaminho]->totalValue));
+    int numPassageirosMelhorCaminho = pathsList[indiceMelhorCaminho]->numPassengersOnPath;
+    for (size_t i = 0; i < numIteractions; i++) { 
+        int valCaminhoAtual = *(((int*)pathsList[i]->totalValue));
+        int numPassageirosAtual = pathsList[i]->numPassengersOnPath;
+        if (  (valMelhorCaminho > valCaminhoAtual && numPassageirosMelhorCaminho <= numPassageirosAtual) || 
+            (valMelhorCaminho >= valCaminhoAtual && numPassageirosMelhorCaminho < numPassageirosAtual) ) {
+            indiceMelhorCaminho = i;
+            valMelhorCaminho = valCaminhoAtual;
+            numPassageirosMelhorCaminho = numPassageirosAtual;
+        }
+    }
+
+    //Calculando a media dos caminhos
+    float mediaCaminhos = 0;
+    for (size_t i = 0; i < numIteractions; i++) { mediaCaminhos += *(((int*)pathsList[i]->totalValue));}
+    mediaCaminhos = mediaCaminhos/numIteractions;
+    
+    //Calculando a media dos passageiros
+    float mediaPassageiros = 0;
+    for (size_t i = 0; i < numIteractions; i++) { mediaPassageiros += pathsList[i]->numPassengersOnPath;}
+    mediaPassageiros = mediaPassageiros/numIteractions;
+
+    //Calcula o tempo de execução
+    long seconds = (end.tv_sec - start.tv_sec);
+    long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+
+   //Imprimir as media no file
+    char* fileName = calloc(100, sizeof(char));
+    strcpy(fileName, filePath);
+    strcat(fileName, "graspWith2opt.txt");
 
     FILE *fp;
 

@@ -77,6 +77,7 @@ Container loadPath(const char fileName[], int numIteractionsMultiStart, int numP
 void run(Container ct, char filePath[]) {
   runPathRand(ct->numIteractionsMultiStart, ct->m, ct->p, ct->c, filePath);
   runMultiStartWith2opt(ct->numIteractionsMultiStart, ct->m, ct->p, ct->c, filePath);
+  runGRASPwith2opt(ct->numIteractionsMultiStart, ct->m, ct->p, ct->c, filePath);
   runParticleSwarmOp(ct->numIteractionsSwarmOp, ct->numParticleSwarmOp, ct->m, ct->p, ct->c, filePath);
 }
 

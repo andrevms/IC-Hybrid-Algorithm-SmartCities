@@ -9,8 +9,7 @@
 #include <pathTS.h>
 #include <passageiros.h>
 #include <matrizAdjacente.h>
-
- 
+#include <pathRandAleatorizado.h>
 
 void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car c, char filePath[]);
 
@@ -25,6 +24,8 @@ void runMultiStartWith2opt(int numIteractions, Matriz m, ListPassageiros p, Car 
  * \info Object should be dealloc by user
  */
 int* arrayRandGuloso_int(Matriz m);
+
+void runGRASPwith2opt( int numIteractions, Matriz m, ListPassageiros p, Car c, char filePath[]);
 
 /* \brief Retorna um caminho Guloso randomizado
  * \param m --> Matriz pointer with node values 

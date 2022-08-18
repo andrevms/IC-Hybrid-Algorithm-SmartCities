@@ -1,8 +1,5 @@
 # IC-Hybrid-Algorithm-SmartCities
 
-
-
-
 criar um vetor para cada particula 
 
 pbest
